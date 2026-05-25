@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>QA Automation Tool</title>
+
+  <style>
+    /* =========================================================
+       1. GLOBAL PAGE SETTINGS
+       Controls full page background, font, default color
+    ========================================================= */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe, #dbeafe, #bfdbfe);
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+
+    /* =========================================================
+       2. MAIN PAGE CONTAINER
+       Controls overall page width and outside spacing
+    ========================================================= */
+    .container {
+      padding: 28px 18px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+
+    /* =========================================================
+       3. TOP HEADING SECTION
+       Controls main title and subtitle
+    ========================================================= */
+    .hero {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 34px;
+      margin: 0 0 6px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: #475569;
+      margin: 0;
+    }
+
+
+    /* =========================================================
+       4. MAIN TWO-COLUMN LAYOUT
+       Left side = How It Works + User Manual
+       Right side = Video Walkthrough
+    ========================================================= */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 22px;
+      align-items: start;
+      margin-top: 18px;
+    }
+
+
+    /* =========================================================
+       5. LEFT COLUMN
+       This keeps How It Works card and User Manual card stacked
+    ========================================================= */
+    .left-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+    }
+
+
+    /* =========================================================
+       6. COMMON CARD DESIGN
+       Applies to How It Works, Video, and User Manual cards
+    ========================================================= */
+    .card {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+    }
+
+    .card h2 {
+      color: #1e40af;
+      margin: 0 0 14px;
+      text-align: center;
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+
+    /* =========================================================
+       7. HOW IT WORKS STEPS
+       Controls step text inside the left card
+    ========================================================= */
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 9px 0;
+      font-size: 16px;
+      color: #1e293b;
+      text-align: left;
+      line-height: 1.35;
+    }
+
+    .step-icon {
+      flex: 0 0 auto;
+    }
+
+
+    /* =========================================================
+       8. BUTTON AREA
+       Controls placement of View Template and Download buttons
+    ========================================================= */
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 14px 0 16px;
+    }
+
+
+    /* =========================================================
+       9. MAIN BUTTON STYLE
+       Applies to anchor buttons and actual button tag
+    ========================================================= */
+    .btn {
+      display: inline-block;
+      padding: 9px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      background: #1e40af;
+      color: #ffffff;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.30);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn:hover {
+      background: #1e3a8a;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(30, 64, 175, 0.40);
+    }
+
+
+    /* =========================================================
+       10. SECONDARY BUTTON
+       Green button style for View Template Online
+    ========================================================= */
+    .btn.secondary {
+      background: #0f766e;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.28);
+    }
+
+    .btn.secondary:hover {
+      background: #115e59;
+    }
+
+
+    /* =========================================================
+       11. VIDEO CARD
+       Controls right side walkthrough card
+    ========================================================= */
+    .video-card {
+      padding: 20px;
+    }
+
+    .video-card h2 {
+      font-size: 21px;
+      margin-bottom: 12px;
+    }
+
+    .video-title {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 9px;
+    }
+
+    .video-wrapper {
+      width: 100%;
+      background: #0f172a;
+      border-radius: 13px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.22);
+      border: 3px solid #ffffff;
+    }
+
+
+    /* =========================================================
+       12. VIDEO SIZE
+       Increase/decrease height here if needed
+    ========================================================= */
+    video {
+      width: 100%;
+      height: 255px;
+      display: block;
+      object-fit: cover;
+      background: #0f172a;
+    }
+
+
+    /* =========================================================
+       13. VIDEO DESCRIPTION + CONTROLS
+       Controls caption, Previous/Next buttons and step number
+    ========================================================= */
+    .video-caption {
+      text-align: center;
+      color: #475569;
+      font-size: 12px;
+      margin: 9px 0 0;
+      line-height: 1.35;
+    }
+
+    .video-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      padding: 7px 15px;
+      border-radius: 999px;
+      border: none;
+      background: #e0e7ff;
+      color: #1e40af;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .small-btn:hover {
+      background: #c7d2fe;
+      transform: translateY(-1px);
+    }
+
+    .step-indicator {
+      text-align: center;
+      margin-top: 7px;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+
+    /* =========================================================
+       14. USER MANUAL / HELP GUIDE CARD
+       This card sits directly below How It Works in left column
+    ========================================================= */
+    .guide-card {
+      width: 100%;
+      margin: 0;
+      padding: 17px 20px;
+    }
+
+    .guide-card h2 {
+      font-size: 19px;
+      margin-bottom: 8px;
+    }
+
+    .guide-card p {
+      color: #475569;
+      font-size: 13px;
+      margin: 0 0 12px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .guide-card .button-row {
+      margin: 8px 0 0;
+    }
+
+
+    /* =========================================================
+       15. FOOTER
+       Controls bottom version text
+    ========================================================= */
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+
+    /* =========================================================
+       16. RESPONSIVE DESIGN
+       Applies when screen width is small/mobile
+    ========================================================= */
+    @media (max-width: 900px) {
+      .container {
+        padding: 24px 14px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+      }
+
+      .main-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .left-column {
+        width: 100%;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      video {
+        height: 210px;
+      }
+
+      .button-row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- =====================================================
+         TOP HEADER
+    ====================================================== -->
+    <div class="hero">
+      <h1>🚀 Analytics QA Automation Tool</h1>
+      <p class="subtitle">Validate Tracking Spec against Omnibug data in seconds</p>
+    </div>
+
+
+    <!-- =====================================================
+         MAIN TWO-COLUMN SECTION
+         Left = How It Works + Help Guide
+         Right = Video Walkthrough
+    ====================================================== -->
+    <div class="main-layout">
+
+      <!-- LEFT COLUMN START -->
+      <div class="left-column">
+
+        <!-- HOW IT WORKS CARD -->
+        <div class="card">
+          <h2>🛠 How It Works</h2>
+
+          <div class="step">
+            <span class="step-icon">✅</span>
+            <span><strong>Step 1:</strong> Download the Excel Template</span>
+          </div>
+
+          <div class="button-row">
+
+            <!-- View Template Online Button -->
+            <a class="btn secondary"
+               href="https://vodafone.sharepoint.com/:x:/s/MartechAnalytics/IQA_MfQTLXt7T5207KLiqnZdAQPx11bEAVWEKDYec5peapc?web=1"
+               target="_blank"
+               rel="noopener">
+              View Template Online
+            </a>
+
+            <!-- Download Template Button -->
+            <button class="btn" type="button" onclick="downloadTemplate()">
+              Download & Start QA
+            </button>
+
+          </div>
+
+          <div class="step">
+            <span class="step-icon">✅</span>
+            <span><strong>Step 2:</strong> Paste Tracking Spec &amp; Omnibug Data</span>
+          </div>
+
+          <div class="step">
+            <span class="step-icon">✅</span>
+            <span><strong>Step 3:</strong> Click "Run QA" inside Excel</span>
+          </div>
+
+          <div class="step">
+            <span class="step-icon">✅</span>
+            <span><strong>Step 4:</strong> View QA Summary &amp; Defects</span>
+          </div>
+        </div>
+
+
+        <!-- HELP & GUIDE CARD -->
+        <div class="card guide-card">
+          <h2>📘 Help & Guide</h2>
+
+          <p>New user? Follow a quick guide to get started.</p>
+
+          <div class="button-row">
+            <a class="btn"
+            href="https://vodafone.sharepoint.com/:w:/r/sites/MartechAnalytics/Shared%20Documents/Analytics%20QA%20Automation/QA%20Automation%20Tool-%20User%20Manual.docx?d=w5b1384d76f2f45a9862766da3e722790&csf=1&web=1&e=nxSxBn" 
+               target="_blank"
+               rel="noopener">
+              View Guide
+            </a>
+          </div>
+        </div>
+
+      </div>
+      <!-- LEFT COLUMN END -->
+
+
+      <!-- RIGHT VIDEO CARD -->
+      <div class="card video-card">
+        <h2>🎥 Quick Walkthrough</h2>
+
+        <div class="video-title" id="videoTitle">
+          Step 1: Download the Excel Template
+        </div>
+
+        <div class="video-wrapper">
+          <video id="tutorialVideo" controls autoplay muted loop>
+            <source src="videos/step_1_download_template.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+
+        <p class="video-caption" id="videoCaption">
+          Watch how to download the latest QA Automation workbook from the tool.
+        </p>
+
+        <div class="video-controls">
+          <button class="small-btn" type="button" onclick="previousVideo()">← Previous</button>
+          <button class="small-btn" type="button" onclick="nextVideo()">Next →</button>
+        </div>
+
+        <div class="step-indicator" id="stepIndicator">
+          1 / 4
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+    <footer>
+      Version 1.0 | Digital Analytics Team 🚀
+    </footer>
+
+  </div>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+       1. Download workbook
+       2. Change walkthrough videos using Previous/Next
+  ====================================================== -->
+  <script>
+    function downloadTemplate() {
+        const url = "https://vodafone.sharepoint.com/sites/MartechAnalytics/_layouts/15/download.aspx?SourceUrl=https%3A%2F%2Fvodafone.sharepoint.com%2Fsites%2FMartechAnalytics%2FShared%20Documents%2FAnalytics%20QA%20Automation%2FQA%20automation%20workbook.xlsx";
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "QA automation workbook.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    const videos = [
+      {
+        title: "Step 1: Download the Excel Template",
+        src: "videos/step_1_download_template.mp4",
+        caption: "Watch how to download the latest QA Automation workbook from the tool."
+      },
+      {
+        title: "Step 2: Paste Tracking Spec & Omnibug Data",
+        src: "videos/step_2_paste_spec_&_omnibug_data.mp4",
+        caption: "Paste Tracking Spec data into the Tracking Spec Template sheet and Omnibug data into the Beacon Data sheet."
+      },
+      {
+        title: "Step 3: Run QA Automation",
+        src: "videos/step_3_click_script_button.mp4",
+        caption: "Click the Run Beacon Parser + Run QA Script button inside Excel and wait for processing."
+      },
+      {
+        title: "Step 4: Review Output",
+        src: "videos/step_4_review_the_output.mp4",
+        caption: "Review the generated Parsed Data, QA Summary, and Defect Export sheets."
+      }
+    ];
+
+    let currentVideoIndex = 0;
+
+    function loadVideo(index) {
+      const video = document.getElementById("tutorialVideo");
+      const videoTitle = document.getElementById("videoTitle");
+      const videoCaption = document.getElementById("videoCaption");
+      const stepIndicator = document.getElementById("stepIndicator");
+
+      currentVideoIndex = index;
+
+      videoTitle.textContent = videos[currentVideoIndex].title;
+      videoCaption.textContent = videos[currentVideoIndex].caption;
+      stepIndicator.textContent = (currentVideoIndex + 1) + " / " + videos.length;
+
+      video.src = videos[currentVideoIndex].src;
+      video.load();
+
+      video.play().catch(function () {
+        // Some browsers block autoplay. User can click play manually.
+      });
+    }
+
+    function nextVideo() {
+      const nextIndex = (currentVideoIndex + 1) % videos.length;
+      loadVideo(nextIndex);
+    }
+
+    function previousVideo() {
+      const previousIndex = (currentVideoIndex - 1 + videos.length) % videos.length;
+      loadVideo(previousIndex);
+    }
+  </script>
+
+</body>
+</html>
