@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beacon URL Parser</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+  min-height: 100%;
+}
+
+    body {
+    margin: 0;
+    font-family: 'Poppins', Arial, sans-serif;
+    color: #1e293b;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: transparent;
+    position: relative;
+    }
+
+/* Fixed gradient background layer */
+    body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(135deg, #e60000 0%, #c2185b 48%, #6a1b9a 100%);
+    }
+
+        .logo-top {
+      position: absolute;
+      top: 18px;
+      left: 24px;
+      width: 78px;
+      height: auto;
+      z-index: 1000;
+      border-radius: 4px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .container {
+      padding: 28px 18px;
+      max-width: 1050px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 34px;
+      margin: 0 0 8px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .subtitle {
+      color: #ffffff;
+      opacity: 0.9;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 10px 28px rgba(40, 0, 50, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      margin: 0 auto 18px;
+      max-width: 960px;
+
+    }
+
+    .card h2 {
+      color: #6a1b9a;
+      margin: 0 0 12px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .instructions {
+      text-align: center;
+      color: #475569;
+      font-size: 14px;
+      margin-bottom: 14px;
+      line-height: 1.45;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 190px;
+      resize: vertical;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 14px;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+      outline: none;
+      color: #0f172a;
+      background: #ffffff;
+    }
+
+    textarea:focus {
+      border-color: #6a1b9a;
+      box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.12);
+    }
+    .url-input-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.url-input-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.url-input-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+
+.url-input-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #334155;
+}
+
+.remove-url-btn {
+  border: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 6px 11px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.remove-url-btn:hover {
+  background: #fecaca;
+}
+
+.beacon-url-box {
+  width: 100%;
+  min-height: 92px;
+  max-height: 130px;
+  resize: vertical;
+  overflow-y: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 11px;
+  font-family: Consolas, monospace;
+  font-size: 12.5px;
+  outline: none;
+  color: #0f172a;
+  background: #ffffff;
+}
+
+.beacon-url-box:focus {
+  border-color: #6a1b9a;
+  box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.12);
+}
+
+.add-url-row {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.add-url-btn {
+  border: 1px dashed #6a1b9a;
+  background: #ffffff;
+  color: #6a1b9a;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 9px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.add-url-btn:hover {
+  background: #f3e8ff;
+}
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      background: #e60000;
+      color: #ffffff;
+      transition: all 0.25s ease;
+      box-shadow: 0 5px 14px rgba(230, 0, 0, 0.28);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn:hover {
+      background: #c0002b;
+      transform: translateY(-1px);
+      box-shadow: 0 7px 18px rgba(230, 0, 0, 0.38);
+    }
+
+    .btn.secondary {
+      background: #6a1b9a;
+      box-shadow: 0 5px 14px rgba(106, 27, 154, 0.28);
+    }
+
+    .btn.secondary:hover {
+      background: #4a148c;
+    }
+
+    .btn.light {
+      background: #fce4ec;
+      color: #c2185b;
+      box-shadow: none;
+    }
+
+    .status {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 14px;
+      color: #475569;
+    }
+
+    .result-card {
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        margin: 18px auto 0;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+        max-width: 960px;
+}
+    .result-header {
+      padding: 14px 16px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .result-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .result-meta {
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  table-layout: fixed;
+}
+
+    th {
+      background: #6a1b9a;
+      color: #ffffff;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    td {
+  padding: 7px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+    td.param {
+  font-weight: 700;
+  color: #334155;
+  background: #fafafa;
+  word-break: break
+    }
+    
+.param-col {
+  width: 18%;
+}
+
+.value-col {
+  width:82%;
+}
+
+    .error-box {
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #9f1239;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-top: 14px;
+      font-size: 13px;
+      word-break: break-word;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #ffffff;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        padding: 24px 14px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+      }
+
+      .button-row {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <img src="vois logo.jpg" class="logo-top" alt="VOIS Logo">
+
+  <div class="container">
+    <div class="hero">
+      <h1>Beacon URL Parser</h1>
+      <p class="subtitle">Paste one or multiple Adobe Analytics beacon URLs and view human-readable Param / Value output.</p>
+    </div>
+
+    <div class="card">
+      <h2>Parse Beacon URL(s)</h2>
+
+      <p class="instructions">
+        Paste one beacon URL in each box. Use “+ Add Another URL” for multiple beacons.
+      </p>
+
+      <div id="urlInputList" class="url-input-list">
+  <div class="url-input-item">
+    <div class="url-input-header">
+      <span class="url-input-title">Beacon URL 1</span>
+    </div>
+
+    <textarea
+      class="beacon-url-box"
+      placeholder="Paste beacon URL, raw query string, or Omnibug JSON payload here..."
+    ></textarea>
+  </div>
+</div>
+
+<div class="add-url-row">
+  <button class="add-url-btn" type="button" onclick="addUrlBox()">
+    + Add Another URL
+  </button>
+</div>
+
+      <div class="button-row">
+        <button class="btn" type="button" onclick="parseBeacons()">Parse URL(s)</button>
+        <button class="btn light" type="button" onclick="clearAll()">Clear</button>
+        
+  <a class="btn secondary" href="index.html">
+    ← Back to Home
+  </a>
+
+      </div>
+
+      <div class="status" id="statusText"></div>
+    </div>
+
+    <div id="resultsContainer"></div>
+
+    <footer>
+      Digital Analytics Team
+    </footer>
+  </div>
+
+  <script>
+    const API_URL = "https://qa-automation-backend.onrender.com/web/parse-beacons";
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function getInputUrls() {
+  const boxes = document.querySelectorAll(".beacon-url-box");
+
+  return Array.from(boxes)
+    .map(box => box.value.trim())
+    .filter(value => value.length > 0);
+}
+
+function refreshUrlBoxLabels() {
+  const items = document.querySelectorAll(".url-input-item");
+
+  items.forEach((item, index) => {
+    const title = item.querySelector(".url-input-title");
+    const removeBtn = item.querySelector(".remove-url-btn");
+
+    if (title) {
+      title.textContent = `Beacon URL ${index + 1}`;
+    }
+
+    if (removeBtn) {
+      removeBtn.style.display = items.length === 1 ? "none" : "inline-block";
+    }
+  });
+}
+
+function addUrlBox() {
+  const list = document.getElementById("urlInputList");
+
+  const item = document.createElement("div");
+  item.className = "url-input-item";
+
+  item.innerHTML = `
+    <div class="url-input-header">
+      <span class="url-input-title">Beacon URL</span>
+      <button class="remove-url-btn" type="button" onclick="removeUrlBox(this)">
+        Remove
+      </button>
+    </div>
+
+    <textarea
+      class="beacon-url-box"
+      placeholder="Paste beacon URL, raw query string, or Omnibug JSON payload here..."
+    ></textarea>
+  `;
+
+  list.appendChild(item);
+  refreshUrlBoxLabels();
+
+  const newBox = item.querySelector(".beacon-url-box");
+  if (newBox) {
+    newBox.focus();
+  }
+}
+
+function removeUrlBox(button) {
+  const items = document.querySelectorAll(".url-input-item");
+
+  if (items.length <= 1) {
+    return;
+  }
+
+  button.closest(".url-input-item").remove();
+  refreshUrlBoxLabels();
+}
+
+    async function parseBeacons() {
+      const statusText = document.getElementById("statusText");
+      const resultsContainer = document.getElementById("resultsContainer");
+
+      const urls = getInputUrls();
+
+      resultsContainer.innerHTML = "";
+
+      if (!urls.length) {
+        statusText.textContent = "Please paste at least one beacon URL.";
+        return;
+      }
+
+      statusText.textContent = "Parsing... please wait. Render may take a few seconds if backend is waking up.";
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ urls })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "Parsing failed.");
+        }
+
+        statusText.textContent = `Parsed ${data.count} URL(s). Error(s): ${data.errorCount || 0}`;
+
+        renderResults(data);
+
+      } catch (error) {
+        statusText.textContent = "";
+        resultsContainer.innerHTML = `
+          <div class="card">
+            <div class="error-box">
+              <strong>Error:</strong> ${escapeHtml(error.message)}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderResults(data) {
+      const resultsContainer = document.getElementById("resultsContainer");
+
+      let html = "";
+
+      if (data.errors && data.errors.length) {
+        html += `<div class="card"><h2>Errors</h2>`;
+
+        data.errors.forEach(err => {
+          html += `
+            <div class="error-box">
+              <strong>URL ${escapeHtml(err.index)}:</strong> ${escapeHtml(err.error)}
+              <br>
+              <small>${escapeHtml(err.inputUrl)}</small>
+            </div>
+          `;
+        });
+
+        html += `</div>`;
+      }
+
+      if (!data.results || !data.results.length) {
+        resultsContainer.innerHTML = html || `
+          <div class="card">
+            <p class="instructions">No parsed results found.</p>
+          </div>
+        `;
+        return;
+      }
+
+      data.results.forEach(result => {
+        const rows = result.rows || [];
+
+        html += `
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-title">
+                URL ${escapeHtml(result.index)} — ${escapeHtml(result.callType || "Parsed Beacon")}
+              </div>
+              <div class="result-meta">
+                <strong>Page Name:</strong> ${escapeHtml(result.pageName || "-")}<br>
+                <strong>Event Name:</strong> ${escapeHtml(result.eventName || "-")}
+                &nbsp; | &nbsp;
+                <strong>Event Action:</strong> ${escapeHtml(result.eventAction || "-")}
+                &nbsp; | &nbsp;
+                <strong>Event Label:</strong> ${escapeHtml(result.eventLabel || "-")}
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <colgroup>
+                    <col class="param-col">
+                    <col class="value-col">
+                </colgroup>
+                <thead>
+                    <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                    </tr>
+                </thead>
+            <tbody>
+        `;
+
+        rows.forEach(row => {
+          html += `
+            <tr>
+              <td class="param">${escapeHtml(row.param)}</td>
+              <td>${escapeHtml(row.value)}</td>
+            </tr>
+          `;
+        });
+
+        html += `
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      });
+
+      resultsContainer.innerHTML = html;
+    }
+
+    function clearAll() {
+  const list = document.getElementById("urlInputList");
+
+  list.innerHTML = `
+    <div class="url-input-item">
+      <div class="url-input-header">
+        <span class="url-input-title">Beacon URL 1</span>
+      </div>
+
+      <textarea
+        class="beacon-url-box"
+        placeholder="Paste beacon URL, raw query string, or Omnibug JSON payload here..."
+      ></textarea>
+    </div>
+  `;
+
+  document.getElementById("statusText").textContent = "";
+  document.getElementById("resultsContainer").innerHTML = "";
+
+  refreshUrlBoxLabels();
+}
+refreshUrlBoxLabels();
+  </script>
+</body>
+</html>

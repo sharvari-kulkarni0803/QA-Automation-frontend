@@ -40,7 +40,60 @@
   height: auto;
   z-index: 1000;
 }*/
+.parser-top-widget {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  z-index: 1000;
+  text-align: center;
+  min-width: 170px;
+}
 
+.parser-helper-text {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  letter-spacing: 0.15px;
+  opacity: 0.95;
+  white-space: nowrap;
+}
+
+.parser-top-btn {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  background: #ffffff;
+  color: #6a1b9a;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+  border: none;
+  transition: all 0.25s ease;
+}
+
+.parser-top-btn:hover {
+  background: #fce4ec;
+  color: #c2185b;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
+}
+
+/* Mobile view */
+@media (max-width: 900px) {
+  .parser-top-widget {
+    position: static;
+    width: fit-content;
+    min-width: unset;
+    margin: 88px auto 0;
+  }
+
+  .parser-helper-text {
+    font-size: 12px;
+  }
+
+}
 
     /* =========================================================
        2. MAIN PAGE CONTAINER
@@ -68,6 +121,7 @@
       font-weight: 700;
       color: #ffffff;
     }
+    
 
     .subtitle {
       font-size: 15px;
@@ -86,7 +140,7 @@
       grid-template-columns: 0.82fr 1.18fr;
       gap: 22px;
       align-items: start;
-      margin-top: 18px;
+      margin-top: 30px;
     }
 
 
@@ -385,6 +439,10 @@
 <!--<img src="vois-logo-white-transparent.png" class="logo-top" alt="VOIS Logo">-->
 <img src="vois logo.jpg" class="logo-top" alt="VOIS Logo">
 
+<div class="parser-top-widget">
+  <br><div class="parser-helper-text">Decode beacon URLs</div>
+  <a class="parser-top-btn" href="beacon-parser.html">Beacon Parser</a>
+</div>
   <div class="container">
 
     <!-- =====================================================
@@ -393,7 +451,6 @@
     <div class="hero">
       <h1>Analytics QA Automation Tool</h1><br>
     </div>
-
 
     <!-- =====================================================
          MAIN TWO-COLUMN SECTION
